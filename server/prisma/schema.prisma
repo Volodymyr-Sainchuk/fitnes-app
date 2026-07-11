@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  passwordHash String
+  phone        String?
+  role         String    @default("MEMBER")
+  trainer      Trainer?
+  bookings     Booking[]
+  payments     Payment[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Trainer {
+  id             Int     @id @default(autoincrement())
+  userId         Int     @unique
+  photo          String?
+  bio            String?
+  specialization String?
+  user           User    @relation(fields: [userId], references: [id])
+  classes        FitnessClass[]
+}
+
+model FitnessClass {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  trainerId   Int
+  dateTime    DateTime
+  duration    Int
+  capacity    Int
+  trainer     Trainer  @relation(fields: [trainerId], references: [id])
+  bookings    Booking[]
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  classId   Int
+  status    String   @default("ACTIVE")
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  fitness   FitnessClass @relation(fields: [classId], references: [id])
+}
+
+model Membership {
+  id          Int     @id @default(autoincrement())
+  name        String
+  price       Float
+  durationDays Int
+  benefits    String?
+  isActive    Boolean @default(true)
+}
+
+model Payment {
+  id                Int     @id @default(autoincrement())
+  userId            Int
+  membershipId      Int?
+  amount            Float
+  status            String  @default("PENDING")
+  provider          String?
+  providerSessionId String?
+  createdAt         DateTime @default(now())
+  user              User    @relation(fields: [userId], references: [id])
+}
