@@ -1,0 +1,18 @@
+POST   /api/auth/register
+POST   /api/auth/login
+
+GET    /api/classes
+GET    /api/classes/:id
+POST   /api/classes                 # admin
+PATCH  /api/classes/:id             # admin
+DELETE /api/classes/:id             # admin
+
+POST   /api/bookings                # запис на заняття
+GET    /api/bookings/my             # записи поточного користувача
+DELETE /api/bookings/:id            # скасувати запис
+
+GET    /api/memberships
+POST   /api/payments/create-session # Stripe-оплата
+
+GET    /api/users/me
+PATCH  /api/users/me
