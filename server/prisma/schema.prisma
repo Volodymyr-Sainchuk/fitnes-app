@@ -13,6 +13,7 @@ model User {
   email        String    @unique
   passwordHash String
   phone        String?
+  socialLinks  Json?
   role         String    @default("MEMBER")
   trainer      Trainer?
   bookings     Booking[]
