@@ -1,4 +1,4 @@
-import { Camera, MapPin, Phone, Send } from "lucide-react";
+import { Camera, Globe, MapPin, MessageCircle, Phone, Play, Send } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const navLinks = [
@@ -7,6 +7,12 @@ const navLinks = [
   { to: "/trainers", label: "Тренери" },
   { to: "/memberships", label: "Абонементи" },
   { to: "/contact", label: "Контакти" },
+];
+
+const socialLinks = [
+  { href: "https://www.instagram.com/sportlend.club/", label: "Instagram Sportlend", icon: Camera },
+  { href: "https://www.facebook.com/sportlend.club/", label: "Facebook Sportlend", icon: MessageCircle },
+  { href: "https://www.youtube.com/@sportlendclub", label: "YouTube Sportlend", icon: Play },
 ];
 
 export default function Footer() {
@@ -32,13 +38,22 @@ export default function Footer() {
           <h4>Контакти</h4>
           <ul className="footer-contact-list">
             <li>
-              <Phone size={16} /> +38 (050) 123-45-67
+              <Phone size={16} />
+              <a href="tel:+380501234567">+38 (050) 123-45-67</a>
             </li>
             <li>
-              <Send size={16} /> hello@sportlend.club
+              <Send size={16} />
+              <a href="mailto:hello@sportlend.club">hello@sportlend.club</a>
             </li>
             <li>
-              <MapPin size={16} /> Київ, вул. Шевченка 12
+              <MapPin size={16} />
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Kyiv+Shevchenka+12"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Київ, вул. Шевченка 12
+              </a>
             </li>
           </ul>
         </div>
@@ -46,14 +61,17 @@ export default function Footer() {
       <div className="footer-bottom">
         <span>© {new Date().getFullYear()} Sportlend</span>
         <div className="footer-socials">
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram Sportlend">
-            <Send size={18} />
-          </a>
-          <a href="https://www.tiktok.com" target="_blank" rel="noreferrer" aria-label="TikTok Sportlend">
-            <Camera size={18} />
-          </a>
+          {socialLinks.map(({ href, label, icon: Icon }) => (
+            <a key={href} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
+              <Icon size={18} />
+            </a>
+          ))}
         </div>
-        <span>Volodymyr Sainchuk — CEO</span>
+        <span>
+          <a href="https://sportlend.club" target="_blank" rel="noopener noreferrer">
+            sportlend.club
+          </a>
+        </span>
       </div>
     </footer>
   );

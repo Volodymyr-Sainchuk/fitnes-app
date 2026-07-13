@@ -11,11 +11,19 @@ import DashboardPage from "./pages/DashboardPage/DashboardPage.jsx";
 import ContactPage from "./pages/ContactPage/ContactPage.jsx";
 import AdminPage from "./pages/AdminPage/AdminPage.jsx";
 import AdminRoute from "./routes/AdminRoute.jsx";
+import AIConsultant from "./components/common/AIConsultant/AIConsultant.jsx";
+import { Suspense, lazy } from "react";
+import { useLocation } from "react-router-dom";
 
-export default function App() {
+const VirtualTourPage = lazy(() => import("./features/virtual-tour/VirtualTourPage.tsx"));
+
+function AppContent() {
+  const location = useLocation();
+  const inTour = location.pathname.startsWith("/virtual-tour");
+
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <>
+      <Suspense fallback={<div className="tour-route-loading">Завантаження Virtual Tour...</div>}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/classes" element={<ClassesPage />} />
@@ -24,6 +32,7 @@ export default function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/virtual-tour" element={<VirtualTourPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardPage />} />
           </Route>
@@ -32,6 +41,17 @@ export default function App() {
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+      </Suspense>
+      {inTour ? null : <AIConsultant />}
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <AppContent />
       </BrowserRouter>
     </AuthProvider>
   );

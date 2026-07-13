@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import Button from "../../common/Button/Button.jsx";
@@ -55,6 +55,8 @@ export default function MembershipCard({ plan, recommended = false }) {
           ? "Безлімітний зал"
           : "8 відвідувань");
   const [open, setOpen] = useState(false);
+  const handleOpen = useCallback(() => setOpen(true), []);
+  const handleClose = useCallback(() => setOpen(false), []);
 
   return (
     <motion.article
@@ -80,11 +82,11 @@ export default function MembershipCard({ plan, recommended = false }) {
       </ul>
       <div className="button-row">
         <Button variant="secondary">Обрати абонемент</Button>
-        <Button variant="secondary" className="card-detail-button" onClick={() => setOpen(true)}>
+        <Button variant="secondary" className="card-detail-button" onClick={handleOpen}>
           Детальніше
         </Button>
       </div>
-      <Modal open={open} onClose={() => setOpen(false)} title={name}>
+      <Modal open={open} onClose={handleClose} title={name}>
         <div className="detail-stack">
           <p className="accent-text">
             {durationDays} днів • {price} ₴
@@ -99,7 +101,7 @@ export default function MembershipCard({ plan, recommended = false }) {
           </ul>
           <div className="button-row">
             <Button variant="primary">Обрати абонемент</Button>
-            <Button variant="secondary" onClick={() => setOpen(false)}>
+            <Button variant="secondary" onClick={handleClose}>
               Закрити
             </Button>
           </div>

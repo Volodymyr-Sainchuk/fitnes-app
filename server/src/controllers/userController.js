@@ -18,7 +18,15 @@ export async function getMe(req, res, next) {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user.id },
-      select: { id: true, name: true, email: true, phone: true, role: true, createdAt: true, socialLinks: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        role: true,
+        createdAt: true,
+        socialLinks: true,
+      },
     });
     res.json({ success: true, data: user });
   } catch (err) {
@@ -29,13 +37,25 @@ export async function getMe(req, res, next) {
 export async function updateMe(req, res, next) {
   try {
     const data = {};
-    if (req.body.name) data.name = req.body.name;
+    if (req.body.name !== undefined) data.name = req.body.name;
+    if (req.body.email !== undefined) {
+      const existing = await prisma.user.findFirst({ where: { email: req.body.email, NOT: { id: req.user.id } } });
+      if (existing) return res.status(409).json({ success: false, message: "Email already in use" });
+      data.email = req.body.email;
+    }
     if (req.body.phone !== undefined) data.phone = req.body.phone || null;
     if (req.body.socialLinks !== undefined) data.socialLinks = normalizeSocialLinks(req.body.socialLinks);
     const user = await prisma.user.update({
       where: { id: req.user.id },
       data,
-      select: { id: true, name: true, email: true, phone: true, role: true, socialLinks: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        role: true,
+        socialLinks: true,
+      },
     });
     res.json({ success: true, data: user });
   } catch (err) {
@@ -53,7 +73,15 @@ export async function listUsers(req, res, next) {
         skip,
         take: limit,
         orderBy: { createdAt: "desc" },
-        select: { id: true, name: true, email: true, role: true, createdAt: true, phone: true, socialLinks: true },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          createdAt: true,
+          phone: true,
+          socialLinks: true,
+        },
       }),
       prisma.user.count(),
     ]);
@@ -131,7 +159,15 @@ export async function updateUser(req, res, next) {
     const user = await prisma.user.update({
       where: { id },
       data,
-      select: { id: true, name: true, email: true, role: true, createdAt: true, phone: true, socialLinks: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        phone: true,
+        socialLinks: true,
+      },
     });
 
     res.json({ success: true, data: user });
@@ -152,7 +188,15 @@ export async function updateUserRole(req, res, next) {
     const user = await prisma.user.update({
       where: { id },
       data: { role },
-      select: { id: true, name: true, email: true, role: true, createdAt: true, phone: true, socialLinks: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        phone: true,
+        socialLinks: true,
+      },
     });
 
     res.json({ success: true, data: user });

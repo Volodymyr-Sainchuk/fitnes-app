@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BarChart3, CalendarDays, GraduationCap, LayoutGrid, Menu, ShieldCheck, Users, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ import { fetchTrainers, createTrainer, updateTrainer, deleteTrainer } from "../.
 import { fetchUsers, updateUserRole, createUser } from "../../services/userApi.js";
 import { createClass, updateClass, deleteClass } from "../../services/classApi.js";
 import { createMembership, updateMembership, deleteMembership } from "../../services/membershipApi.js";
+import AdminAnalyticsSection from "../../features/admin-analytics/AdminAnalyticsSection.tsx";
 
 const sectionIcons = {
   overview: <LayoutGrid size={18} />,
@@ -97,16 +98,6 @@ export default function AdminPage() {
       setLoading(false);
     }
   }
-
-  const stats = useMemo(
-    () => ({
-      users: users.length,
-      trainers: trainers.length,
-      classes: classes.filter((item) => new Date(item.dateTime) > new Date()).length,
-      memberships: memberships.filter((item) => item.isActive).length,
-    }),
-    [users.length, trainers.length, classes, memberships],
-  );
 
   const handleUserSubmit = async (event) => {
     event.preventDefault();
@@ -341,28 +332,7 @@ export default function AdminPage() {
 
             {activeTab === "overview" ? (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="admin-section">
-                <div className="stats-grid">
-                  <div className="info-card stat-card">
-                    <p className="section-eyebrow">Користувачі</p>
-                    <h3>{stats.users}</h3>
-                    <p>Зареєстровані в системі</p>
-                  </div>
-                  <div className="info-card stat-card">
-                    <p className="section-eyebrow">Тренери</p>
-                    <h3>{stats.trainers}</h3>
-                    <p>Профілі тренерів</p>
-                  </div>
-                  <div className="info-card stat-card">
-                    <p className="section-eyebrow">Майбутні заняття</p>
-                    <h3>{stats.classes}</h3>
-                    <p>Заплановані події</p>
-                  </div>
-                  <div className="info-card stat-card">
-                    <p className="section-eyebrow">Активні абонементи</p>
-                    <h3>{stats.memberships}</h3>
-                    <p>Планів у роботі</p>
-                  </div>
-                </div>
+                <AdminAnalyticsSection />
                 <div className="info-card quick-actions">
                   <h3>Швидкі дії</h3>
                   <div className="button-row">

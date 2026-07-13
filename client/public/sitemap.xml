@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://sportlend.example/</loc></url>
+  <url><loc>https://sportlend.example/classes</loc></url>
+  <url><loc>https://sportlend.example/trainers</loc></url>
+  <url><loc>https://sportlend.example/memberships</loc></url>
+  <url><loc>https://sportlend.example/contact</loc></url>
+</urlset>

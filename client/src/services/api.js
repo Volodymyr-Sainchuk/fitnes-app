@@ -21,14 +21,18 @@ async function request(endpoint, { method = "GET", body, headers = {}, ...option
   const response = await fetch(`${BASE_URL}${endpoint}`, config);
 
   let payload = null;
+  let rawText = "";
   try {
-    payload = await response.json();
+    rawText = await response.text();
+    payload = rawText ? JSON.parse(rawText) : null;
   } catch {
-    payload = null;
+    payload = rawText || null;
   }
 
   if (!response.ok) {
-    throw new Error(payload?.message || payload?.error || "Сталася помилка запиту");
+    const apiMessage = typeof payload === "object" && payload ? payload.message || payload.error : null;
+    const fallbackMessage = typeof payload === "string" && payload.trim() ? payload.slice(0, 180) : null;
+    throw new Error(apiMessage || fallbackMessage || `Сталася помилка запиту (${response.status})`);
   }
 
   if (payload && typeof payload === "object" && payload.success === false) {

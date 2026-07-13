@@ -42,12 +42,16 @@ export default function DashboardPage() {
   if (authLoading || loading) return <Loader label="Підготовлюємо кабінет..." />;
   if (error) return <p className="form-error">{error}</p>;
 
+  const handleProfileUpdated = (updatedProfile) => {
+    setProfile((current) => ({ ...(current || {}), ...updatedProfile }));
+  };
+
   return (
     <>
       <Header />
       <PageContainer>
         <section className="section-block dashboard-grid">
-          <ProfileSummary user={profile || user} />
+          <ProfileSummary user={profile || user} onProfileUpdated={handleProfileUpdated} />
           <div className="info-card">
             <p className="section-eyebrow">Мої бронювання</p>
             <h2>Список активних записів</h2>

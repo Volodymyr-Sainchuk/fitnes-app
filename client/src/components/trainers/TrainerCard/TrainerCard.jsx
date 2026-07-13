@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import { Phone, Send, Sparkles } from "lucide-react";
 import Modal from "../../common/Modal/Modal.jsx";
@@ -43,6 +43,8 @@ export default function TrainerCard({ trainer }) {
     ([, value]) => typeof value === "string" && value.trim(),
   );
   const [open, setOpen] = useState(false);
+  const handleOpen = useCallback(() => setOpen(true), []);
+  const handleClose = useCallback(() => setOpen(false), []);
 
   return (
     <motion.article
@@ -80,11 +82,11 @@ export default function TrainerCard({ trainer }) {
             </a>
           ) : null}
         </div>
-        <Button variant="secondary" className="card-detail-button" onClick={() => setOpen(true)}>
+        <Button variant="secondary" className="card-detail-button" onClick={handleOpen}>
           Детальніше
         </Button>
       </div>
-      <Modal open={open} onClose={() => setOpen(false)} title={name}>
+      <Modal open={open} onClose={handleClose} title={name}>
         <div className="detail-stack">
           <p className="accent-text">{specialization}</p>
           <p>{bio}</p>
@@ -102,7 +104,7 @@ export default function TrainerCard({ trainer }) {
             <a className="button primary" href={`tel:${phone}`}>
               Зателефонувати
             </a>
-            <Button variant="secondary" onClick={() => setOpen(false)}>
+            <Button variant="secondary" onClick={handleClose}>
               Закрити
             </Button>
           </div>

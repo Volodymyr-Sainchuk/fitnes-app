@@ -8,6 +8,7 @@ const links = [
   { href: "/classes", label: "Заняття" },
   { href: "/trainers", label: "Тренери" },
   { href: "/memberships", label: "Абонементи" },
+  { href: "/virtual-tour", label: "Virtual Tour" },
   { href: "/contact", label: "Контакти" },
 ];
 
