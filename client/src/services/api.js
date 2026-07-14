@@ -1,4 +1,14 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+function buildApiBaseUrl(rawUrl) {
+  if (!rawUrl) return "/api";
+
+  const trimmed = rawUrl.trim();
+  const normalized = trimmed.replace(/\/+$/, "");
+  if (!normalized) return "/api";
+
+  return normalized.endsWith("/api") ? normalized : `${normalized}/api`;
+}
+
+const BASE_URL = buildApiBaseUrl(import.meta.env.VITE_API_URL);
 
 async function request(endpoint, { method = "GET", body, headers = {}, ...options } = {}) {
   const token = localStorage.getItem("token");
@@ -18,7 +28,8 @@ async function request(endpoint, { method = "GET", body, headers = {}, ...option
     config.body = isFormData ? body : JSON.stringify(body);
   }
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, config);
+  const normalizedEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const response = await fetch(`${BASE_URL}${normalizedEndpoint}`, config);
 
   let payload = null;
   let rawText = "";
